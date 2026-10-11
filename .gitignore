@@ -12,3 +12,4 @@ data/processed/
 chroma_db/
 
 *.log
+.DS_Store
