@@ -1,142 +1,157 @@
-# 🎓 LectureAI — AI University Lecture Assistant
+# 🚀 [Tips Hindawi](https://www.tipshindawi.com/) Internship (August–October) 2026
 
-**Transform university lecture recordings into structured, AI-powered study material.**
+> 🎓 This project was built during the [**Tips Hindawi**](https://www.tipshindawi.com/) **Internship (August–October) 2026**.
 
-LectureAI is an AI-powered study assistant that helps students understand university lectures by transcribing recordings, analyzing lecture content, identifying important concepts, and generating revision material on demand.
+## 👤 Participant
 
-Built with **Streamlit, FastAPI, Faster-Whisper, Qwen2.5, and ChromaDB**, the project combines speech recognition, retrieval, and large language models in one study workflow.
+| Field            | Value                                          |
+| ---------------- | ---------------------------------------------- |
+| Full Name        | Zeyad Galal                                    |
+| Project Name     | AI University Lecture Assistant                |
+| GitHub Username  | [@zeyadgalal1](https://github.com/zeyadgalal1) |
+| Internship Batch | August–October 2026                            |
+| Training Program | Large Language Models (LLMs) Program           |
+| Organization     | [**Edrak for AI**](https://edrak4ai.com/en)    |
 
 ---
 
-## ✨ Features
+# 📖 Project Overview
 
-* 🎙️ **Lecture Transcription:** Converts lecture recordings into text using Faster-Whisper (`large-v3`).
+**AI University Lecture Assistant** is an AI-powered application designed to help university students understand lectures and prepare for exams more efficiently.
+
+Students can upload lecture recordings, which are transcribed and processed to generate structured explanations and study materials. An optional digital PDF containing selectable text can also provide additional context.
+
+The project is designed for different university disciplines, including engineering, medicine, business, and mathematics. It also aims to handle Arabic lectures containing English technical terminology, depending on audio and transcription quality.
+
+The application combines speech recognition, Retrieval-Augmented Generation (RAG), vector search, and large language models to turn lecture materials into useful learning resources.
+
+---
+
+# ✨ Features
+
+* 🎙️ **Lecture Transcription:** Converts lecture recordings into text using Faster-Whisper with the `large-v3` model.
 * 🎞️ **Multiple Recording Formats:** Supports MP3, MP4, and OGG uploads.
-* 🌍 **Multilingual Lectures:** Designed to handle Arabic speech mixed with English technical terminology, subject to recording and transcription quality.
-* 📄 **Optional PDF Support:** Extracts selectable text from lecture PDFs using PyMuPDF.
-* 🧠 **AI-Powered Lecture Analysis:** Uses Qwen2.5-7B-Instruct to generate structured explanations and study notes from supplied lecture materials.
-* 🎯 **Important Concepts:** Helps surface key ideas and potentially exam-relevant points mentioned in the lecture.
-* 🔎 **Retrieval-Augmented Workflow:** Uses ChromaDB to index lecture text for retrieval.
-* 📚 **Revision on Demand:** Generates revision material only when the student selects the revision action.
-* ⚡ **GPU-Backed Inference:** Runs model inference through a FastAPI backend hosted in a Kaggle GPU notebook during development.
-* 🖥️ **Interactive Interface:** Provides a Streamlit interface for uploading materials and viewing results.
+* 🌍 **Multilingual Lecture Support:** Designed for Arabic speech mixed with English technical terminology.
+* 📄 **Optional PDF Support:** Extracts selectable text from PDF documents using PyMuPDF. Scanned PDFs requiring OCR are not supported.
+* 🧠 **AI-Powered Explanations:** Uses Qwen2.5-7B-Instruct to generate structured explanations and study notes.
+* 🎯 **Important Concepts:** Helps identify key concepts and potentially exam-relevant points mentioned in the lecture.
+* 🔎 **Semantic Retrieval:** Uses BGE-M3 embeddings and ChromaDB to retrieve relevant lecture content.
+* 📚 **Revision on Demand:** Generates revision material when the student requests it.
+* 🖥️ **Interactive Interface:** Provides a Streamlit interface for uploading lecture materials and viewing results.
+* 🔒 **Lecture-Based Responses:** Designed to use the uploaded recording and optional PDF rather than external web research.
 
-## 🏗️ System Architecture
+---
+
+# 🛠️ Technologies Used
+
+| Technology                  | Purpose                                          |
+| --------------------------- | ------------------------------------------------ |
+| Python                      | Main programming language                        |
+| Streamlit                   | User interface                                   |
+| FastAPI                     | Backend API for model inference                  |
+| Faster-Whisper (`large-v3`) | Lecture transcription                            |
+| Qwen2.5-7B-Instruct         | Lecture explanations and revision generation     |
+| 4-bit NF4 Quantization      | Reduces language-model memory requirements       |
+| LangChain                   | Supports retrieval and text-processing workflows |
+| BGE-M3                      | Creates semantic text embeddings                 |
+| ChromaDB                    | Stores and retrieves vector embeddings           |
+| PyMuPDF                     | Extracts selectable text from PDFs               |
+| FFmpeg                      | Audio processing and conversion                  |
+| Requests                    | Frontend-to-backend HTTP communication           |
+| Kaggle GPU                  | Development environment for model inference      |
+| ngrok                       | Exposes the development backend through a tunnel |
+| Git and GitHub              | Version control and project hosting              |
+
+### System Architecture
 
 ```text
-          Lecture Recording                Optional PDF
-          (MP3 / MP4 / OGG)          (Selectable Text)
-                  │                         │
-                  ▼                         ▼
-             FFmpeg Audio                PyMuPDF
-               Chunking               Text Extraction
-                  │                         │
-                  ▼                         │
-         Faster-Whisper large-v3              │
-                  │                         │
-                  ▼                         ▼
-             Transcript ─────────── Lecture Text
-                  │                         │
-                  └────────────┬────────────┘
-                               ▼
-                    ChromaDB Indexing
-                       and Retrieval
-                               │
-                               ▼
-                    FastAPI Model Backend
-                       (Kaggle GPU)
-                               │
-                               ▼
-                      Qwen2.5-7B-Instruct
-                               │
-                 ┌─────────────┴─────────────┐
-                 ▼                           ▼
-          Lecture Analysis            Revision Material
-                                      (On Demand)
-                 │                           │
-                 └─────────────┬─────────────┘
-                               ▼
-                       Streamlit Interface
+Lecture Recording             Optional PDF
+(MP3 / MP4 / OGG)             (Selectable Text)
+       |                            |
+       v                            v
+     FFmpeg                      PyMuPDF
+       |                            |
+       v                            |
+Faster-Whisper                     |
+       |                            |
+       v                            v
+   Transcript + PDF Text
+             |
+             v
+     Text Processing
+      and Chunking
+             |
+             v
+      BGE-M3 Embeddings
+             |
+             v
+          ChromaDB
+             |
+             v
+      FastAPI Backend
+       (Kaggle GPU)
+             |
+             v
+    Qwen2.5-7B-Instruct
+             |
+       +-----+------+
+       |            |
+       v            v
+Lecture Analysis  Revision
+                   (On Demand)
+       |            |
+       +-----+------+
+             |
+             v
+     Streamlit Interface
 ```
 
-## 🛠️ Technology Stack
+---
 
-| Technology                  | Purpose                                                 |
-| --------------------------- | ------------------------------------------------------- |
-| Python                      | Main programming language                               |
-| Streamlit                   | Interactive frontend                                    |
-| FastAPI                     | Backend API for model inference                         |
-| Faster-Whisper (`large-v3`) | Lecture speech transcription                            |
-| Qwen2.5-7B-Instruct         | Lecture analysis and revision generation                |
-| 4-bit NF4 quantization      | Reduces language-model memory requirements              |
-| ChromaDB                    | Vector database for lecture text retrieval              |
-| PyMuPDF                     | Extracts selectable text from PDFs                      |
-| FFmpeg                      | Audio conversion and chunking                           |
-| Requests                    | HTTP communication between frontend and backend         |
-| Kaggle GPU                  | Development environment for model inference             |
-| ngrok                       | Tunnel between the local application and remote backend |
+# ⚙️ Installation
 
-## 🔄 How It Works
+## Prerequisites
 
-1. **Upload:** The student uploads a lecture recording.
-2. **Transcribe:** Faster-Whisper converts the audio into timestamped text segments.
-3. **Extract:** If a PDF is provided, PyMuPDF extracts its selectable text.
-4. **Index:** Lecture text is divided into chunks and indexed for retrieval using ChromaDB.
-5. **Analyze:** When requested, Qwen2.5 generates study material based on the available lecture content.
-6. **Revise:** The student can separately request revision material when ready.
+Make sure you have:
 
-The application is designed to use the student's supplied lecture materials rather than relying on external web research.
+* Python installed.
+* Git installed.
+* FFmpeg installed and available in your system `PATH`.
+* A configured Kaggle GPU notebook running the FastAPI backend.
+* ngrok configured to expose the backend during development.
 
-## 🚀 Getting Started
-
-### Prerequisites
-
-* Python installed on your computer
-* FFmpeg installed and available on your system `PATH`
-* Git
-* A configured Kaggle GPU notebook running the FastAPI backend
-* ngrok configured to expose the backend during development
-
-### 1. Clone the Repository
+## 1. Clone the Repository
 
 ```bash
 git clone https://github.com/zeyadgalal1/ai-university-lecture-assistant.git
 cd ai-university-lecture-assistant
 ```
 
-### 2. Create a Virtual Environment
+## 2. Create a Virtual Environment
 
-**Windows PowerShell:**
+On Windows PowerShell:
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
-### 3. Install Dependencies
+## 3. Install Dependencies
 
-```bash
+```powershell
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 4. Configure the Backend URL
+## 4. Configure the Backend
 
-The frontend needs the URL of your active FastAPI backend.
+Start the FastAPI model backend in your Kaggle GPU notebook and establish the ngrok tunnel.
 
-If your `api_client.py` reads the `LECTURE_API_URL` environment variable, set it in PowerShell:
+Configure the frontend with your active backend URL according to the settings supported by your `api_client.py` file. Replace any example URL with your actual ngrok URL.
 
-```powershell
-$env:LECTURE_API_URL = "https://YOUR-ACTIVE-NGROK-URL"
-```
+## 5. Run the Application
 
-Replace the example with your active tunnel URL. Do not commit authentication tokens or other secrets to GitHub.
-
-### 5. Start the Application
-
-Make sure your Kaggle notebook has loaded the models, started FastAPI, and established the ngrok tunnel.
-
-Then run:
+From the project directory, run:
 
 ```bash
 streamlit run app.py
@@ -144,90 +159,77 @@ streamlit run app.py
 
 Open the local URL shown in the terminal, usually `http://localhost:8501`.
 
-## 📖 How to Use
-
-1. Open LectureAI in your browser.
-2. Upload an MP3, MP4, or OGG lecture recording.
-3. Optionally upload a PDF containing selectable text.
-4. Process the lecture and wait for transcription to finish.
-5. Review the available transcript.
-6. Select **Analyze Lecture** to generate study material.
-7. Select **Generate Revision** whenever you want revision content.
-
-## 📁 Project Structure
-
-```text
-AI_University_Lecture_Assistant/
-│
-├── app.py
-├── api_client.py
-├── requirements.txt
-│
-├── modules/
-│   ├── __init__.py
-│   ├── pdf_processor.py
-│   └── rag_pipeline.py
-│
-├── data/
-│   ├── uploads/
-│   └── processed/
-│
-└── .streamlit/
-    └── config.toml
-```
-
-The model-loading code and FastAPI service may be maintained in a separate Kaggle notebook, depending on the deployment setup.
-
-## 🔌 Backend API
-
-The development backend uses endpoints for health checks, transcription jobs, analysis jobs, and revision jobs.
-
-| Endpoint                      | Method | Purpose                           |
-| ----------------------------- | ------ | --------------------------------- |
-| `/`                           | GET    | Check backend status              |
-| `/transcribe/start`           | POST   | Start a transcription job         |
-| `/transcribe/status/{job_id}` | GET    | Retrieve transcription job status |
-| `/analyze/start`              | POST   | Start lecture analysis            |
-| `/analyze/status/{job_id}`    | GET    | Retrieve analysis job status      |
-| `/revision/start`             | POST   | Start revision generation         |
-| `/revision/status/{job_id}`   | GET    | Retrieve revision job status      |
-
-These endpoints describe the current development architecture. Keep the frontend API client synchronized with the backend route definitions.
-
-## ⚠️ Limitations
-
-* The development backend requires an active Kaggle session and ngrok tunnel.
-* Free notebook sessions and tunnels may disconnect or change availability.
-* Only selectable-text PDFs are supported; scanned PDFs require OCR, which is not included in this version.
-* Transcription quality depends on audio clarity, background noise, accents, and technical terminology.
-* AI-generated explanations and revision material may contain mistakes and should be checked against the original lecture.
-* Exam-focused points are suggestions generated from the available content, not guarantees about future exam questions.
-* Processing time depends on recording length, model generation, and available GPU resources.
-
-## 🔐 Privacy and Responsible Use
-
-* Do not upload lecture recordings or documents without appropriate permission.
-* Do not commit API tokens, ngrok credentials, private recordings, or other sensitive information.
-* Review generated study material before relying on it for exams or other important academic decisions.
-* Review dependency licenses before redistributing or deploying the project.
-
-## 🗺️ Future Improvements
-
-* More reliable background-job recovery and status tracking.
-* Stable, always-available model hosting.
-* Better handling and reporting of inaudible or low-confidence transcript sections.
-* Exportable lecture notes, summaries, and revision questions.
-* Automated tests for the frontend and backend.
-* More robust deployment and configuration management.
-
-## 👨‍💻 Author
-
-**Zeyad Galal**
-
-Computer Engineering student interested in AI engineering, machine learning, and practical LLM applications.
-
-* **GitHub:** [@zeyadgalal1](https://github.com/zeyadgalal1)
+**Note:** The backend must be running and accessible for lecture processing to work.
 
 ---
 
-*LectureAI — Learn from your lectures. Understand the concepts. Prepare with confidence.*
+# 🚀 Usage
+
+1. Open the application in your browser.
+2. Upload a lecture recording in a supported format.
+3. Optionally upload a PDF containing selectable text.
+4. Process the recording to generate a transcript.
+5. Review the transcript and available lecture content.
+6. Select the lecture-analysis action to generate explanations and study material.
+7. Review the important concepts identified from the lecture.
+8. Select the revision action when you are ready to generate revision material.
+
+The application is designed to base its output on the uploaded lecture materials. Revision content is generated on demand when requested by the student.
+
+---
+
+# 📸 Demo
+
+Watch the demonstration video to see the AI University Lecture Assistant interface and workflow.
+
+🎥 **[Watch the Lecture Assistant Demo Video](demo/video_AI_compressed.mp4)**
+
+**GitHub Repository:** [zeyadgalal1/ai-university-lecture-assistant](https://github.com/zeyadgalal1/ai-university-lecture-assistant)
+
+> **Important:** Make sure the video filename and path above match the actual file in your `demo` folder.
+
+---
+
+# 📈 Results
+
+The project brings several AI technologies together in a single university study workflow.
+
+* Converts lecture recordings into text.
+* Supports additional context from selectable-text PDFs.
+* Combines semantic retrieval with an LLM to generate lecture-based study materials.
+* Allows students to request revision material when needed.
+* Provides a browser-based interface for interacting with the system.
+
+The project demonstrates practical integration of speech recognition, embeddings, vector databases, RAG workflows, LLM inference, and web application development.
+
+**Current limitations:** Processing speed depends on recording length, model inference, and available GPU resources. The application has not yet been fully optimized or evaluated using a formal accuracy benchmark.
+
+---
+
+# 🔮 Future Improvements
+
+* Optimize transcription and generation speed for longer lectures.
+* Improve handling of noisy audio and unclear speech.
+* Deploy the model backend on a more stable, always-available hosting service.
+* Improve processing-status tracking and recovery from failures.
+* Add export options for notes, summaries, and revision questions.
+* Add automated tests for the frontend and backend.
+* Evaluate transcription and generated explanations using structured quality tests.
+
+---
+
+# 📚 About the Internship
+
+This project was developed as part of the [**Tips Hindawi**](https://www.tipshindawi.com/) **Internship (August–October) 2026**.
+
+[Tips Hindawi](https://www.tipshindawi.com/) is the internships department of [**Edrak for AI**](https://edrak4ai.com/en). The internship encourages participants to build real-world projects, apply practical skills, and showcase their work through GitHub.
+
+For more information about the internship, training programs, and upcoming batches, visit the [official Tips Hindawi website](https://www.tipshindawi.com/).
+
+---
+
+# 📄 License
+
+This project is shared for educational and portfolio purposes.
+
+Unless a specific license is added to the repository, no additional permissions should be assumed for redistribution or reuse.
